@@ -75,10 +75,33 @@ export default function App() {
         body: JSON.stringify({ prompt: trimmed }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      let data: any = null;
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to rewrite prompt. Please try again.');
+      if (contentType.includes('application/json')) {
+        try {
+          data = await response.json();
+        } catch {
+          data = null;
+        }
+      }
+
+      if (!response.ok || !data?.success) {
+        if (data?.error) {
+          throw new Error(data.error);
+        }
+        // If server returned plain text or HTML error (e.g. Vercel 500 error page)
+        const text = !data ? await response.text().catch(() => '') : '';
+        if (
+          response.status === 500 ||
+          text.includes('A server error') ||
+          text.includes('FUNCTION_INVOCATION')
+        ) {
+          throw new Error(
+            'Server Error (500): Please ensure GEMINI_API_KEY and GROQ_API_KEY are configured in your Vercel Project Settings > Environment Variables, then redeploy.'
+          );
+        }
+        throw new Error(text || `Server returned status ${response.status}. Please try again.`);
       }
 
       setResult(data.improvedPrompt);
