@@ -173,8 +173,12 @@ Visit `http://localhost:3000` in your browser.
    - `GEMINI_API_KEY` = your Gemini API key
    - `GROQ_API_KEY` = your Groq API key
 
-4. **Deploy**:
-   - Click **Deploy**. Vercel will build and deploy your applet in seconds!
+4. **Framework Preset & Settings**:
+   - `vercel.json` is already included to configure the Vite build and `/api/fix` serverless function.
+   - If importing an existing project that previously guessed Next.js, go to **Settings > General > Framework Preset** and choose **Vite** (Output Directory: `dist`).
+
+5. **Deploy**:
+   - Click **Deploy**. Vercel will build into `dist` and provision the serverless API function in seconds!
 
 ### Method 2: Using Vercel CLI
 

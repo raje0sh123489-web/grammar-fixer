@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-import { PROMPT_FIXER_SYSTEM_PROMPT } from './prompts.ts';
+import { PROMPT_FIXER_SYSTEM_PROMPT } from './prompts';
 
 let geminiClient: GoogleGenAI | null = null;
 

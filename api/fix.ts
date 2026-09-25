@@ -1,7 +1,20 @@
-import { fixPromptWithFallback } from '../lib/fixPrompt.ts';
+import { fixPromptWithFallback } from '../lib/fixPrompt';
 
-// Vercel Serverless Function Handler (Node.js runtime)
+// Vercel Serverless Function Handler (Node.js runtime on Vercel)
 export default async function handler(req: any, res: any) {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
@@ -10,7 +23,16 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const prompt = req.body?.prompt;
+    let body = req.body;
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        // parsed already or unparsable
+      }
+    }
+
+    const prompt = body?.prompt;
     if (!prompt || typeof prompt !== 'string') {
       return res.status(400).json({
         success: false,

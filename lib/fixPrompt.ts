@@ -1,5 +1,5 @@
-import { fixWithGemini } from './gemini.ts';
-import { fixWithGroq } from './groq.ts';
+import { fixWithGemini } from './gemini';
+import { fixWithGroq } from './groq';
 
 /**
  * Executes prompt improvement with seamless automatic fallback:

@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { fixPromptWithFallback } from './lib/fixPrompt.ts';
+import { fixPromptWithFallback } from './lib/fixPrompt';
 
 dotenv.config();
 
